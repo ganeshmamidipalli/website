@@ -1,154 +1,126 @@
 "use client"
 
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Calendar, ExternalLink, Users } from 'lucide-react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { getResearch } from '@/lib/contentful'
-import { useEffect, useState } from 'react'
-import { formatDate } from '@/lib/utils'
-import type { Research } from '@/types/contentful'
+import { motion } from "framer-motion"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { ExternalLink, Users } from "lucide-react"
+import Image from "next/image"
 
-export function Research() {
-  const [research, setResearch] = useState<Research[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    async function fetchResearch() {
-      try {
-        const researchData = await getResearch()
-        setResearch(researchData)
-      } catch (error) {
-        console.error('Error fetching research:', error)
-      } finally {
-        setLoading(false)
-      }
+// Dummy research data
+const dummyResearch = [
+  {
+    id: "1",
+    title: "Advanced Fine-tuning Techniques for Large Language Models",
+    abstract: "A comprehensive study on novel fine-tuning methodologies for large language models, including parameter-efficient fine-tuning (PEFT), LoRA, and QLoRA techniques for improved performance and reduced computational costs.",
+    authors: ["Dr. Sarah Chen", "Prof. Michael Rodriguez", "Dr. Alex Thompson"],
+    publicationUrl: "https://arxiv.org/abs/2024.01234",
+    publishedDate: "2024-01-20",
+    featuredImage: {
+      url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+      alt: "Fine-tuning Research"
     }
-
-    fetchResearch()
-  }, [])
-
-  if (loading) {
-    return (
-      <section id="research" className="section-padding">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Research & Publications</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Academic papers, research contributions, and publications in AI and machine learning.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-muted h-64 rounded-lg mb-4" />
-                <div className="space-y-2">
-                  <div className="h-4 bg-muted rounded w-3/4" />
-                  <div className="h-3 bg-muted rounded w-full" />
-                  <div className="h-3 bg-muted rounded w-2/3" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
+  },
+  {
+    id: "2",
+    title: "Autonomous System Intelligence: A New Paradigm",
+    abstract: "Exploring the emergence of Autonomous System Intelligence (ASI) and its potential to create systems that can think, learn, and adapt independently without human intervention.",
+    authors: ["Dr. James Wilson", "Dr. Emily Zhang", "Prof. David Kim"],
+    publicationUrl: "https://arxiv.org/abs/2024.01567",
+    publishedDate: "2024-01-15",
+    featuredImage: {
+      url: "https://images.unsplash.com/photo-1673187730317-4973d8d0d8e8?w=800&h=600&fit=crop",
+      alt: "ASI Research"
+    }
+  },
+  {
+    id: "3",
+    title: "Multi-Agent Systems for Complex Problem Solving",
+    abstract: "Research on developing sophisticated multi-agent systems that can collaborate to solve complex problems, with applications in robotics, autonomous vehicles, and distributed AI systems.",
+    authors: ["Dr. Lisa Park", "Prof. Robert Johnson", "Dr. Maria Garcia"],
+    publicationUrl: "https://arxiv.org/abs/2024.01890",
+    publishedDate: "2024-01-10",
+    featuredImage: {
+      url: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop",
+      alt: "Multi-Agent Systems"
+    }
   }
+]
 
+export default function Research() {
   return (
     <section id="research" className="section-padding">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Research & Publications</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Academic papers, research contributions, and publications in AI and machine learning.
+          <h2 className="text-4xl font-bold mb-4">Research & Publications</h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Cutting-edge research in AI, machine learning, and autonomous systems.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {research.map((paper, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {dummyResearch.map((paper, index) => (
             <motion.div
-              key={paper.sys.id}
+              key={paper.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
             >
-              <Card className="h-full card-hover group">
-                {paper.fields.featuredImage && (
+              <Card className="h-full group hover:shadow-lg transition-all duration-300">
+                <CardHeader className="p-0">
                   <div className="relative h-48 overflow-hidden rounded-t-lg">
                     <Image
-                      src={`https:${paper.fields.featuredImage.fields.file.url}`}
-                      alt={paper.fields.title}
+                      src={paper.featuredImage.url}
+                      alt={paper.featuredImage.alt}
                       fill
-                      className="object-cover transition-transform group-hover:scale-105"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                )}
-                <CardHeader>
-                  <div className="flex items-center text-sm text-muted-foreground mb-2">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    {formatDate(paper.fields.publishedAt)}
-                  </div>
-                  <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors">
-                    {paper.fields.title}
-                  </CardTitle>
-                  {paper.fields.journal && (
-                    <p className="text-sm text-muted-foreground font-medium">
-                      {paper.fields.journal}
-                    </p>
-                  )}
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <CardDescription className="line-clamp-4">
-                    {paper.fields.abstract}
+                <CardContent className="p-6">
+                  <CardTitle className="text-xl mb-3 line-clamp-2">{paper.title}</CardTitle>
+                  <CardDescription className="text-muted-foreground mb-4 line-clamp-4">
+                    {paper.abstract}
                   </CardDescription>
-                  
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <Users className="h-4 w-4 mr-2" />
-                    <span className="line-clamp-1">
-                      {paper.fields.authors.join(', ')}
+                  <div className="flex items-center gap-2 mb-4">
+                    <Users className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">
+                      {paper.authors.join(", ")}
                     </span>
                   </div>
                 </CardContent>
-                <div className="p-6 pt-0">
-                  {paper.fields.publicationUrl && (
-                    <Button variant="outline" size="sm" asChild>
-                      <Link href={paper.fields.publicationUrl} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="h-4 w-4 mr-2" />
-                        Read Paper
-                      </Link>
-                    </Button>
-                  )}
-                </div>
+                <CardFooter className="p-6 pt-0">
+                  <Button asChild className="w-full">
+                    <a href={paper.publicationUrl} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Read Paper
+                    </a>
+                  </Button>
+                </CardFooter>
               </Card>
             </motion.div>
           ))}
         </div>
 
-        {research.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-12"
-          >
-            <p className="text-muted-foreground">No research papers available at the moment.</p>
-          </motion.div>
-        )}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-center mt-12"
+        >
+          <Button asChild size="lg" variant="outline">
+            <a href="https://scholar.google.com/citations?user=yourprofile" target="_blank" rel="noopener noreferrer">
+              View All Publications
+            </a>
+          </Button>
+        </motion.div>
       </div>
     </section>
   )

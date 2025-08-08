@@ -1,153 +1,138 @@
 "use client"
 
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import Link from 'next/link'
-import { ExternalLink, Github } from 'lucide-react'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { getFeaturedProjects } from '@/lib/contentful'
-import { useEffect, useState } from 'react'
-import type { Project } from '@/types/contentful'
+import { motion } from "framer-motion"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { ExternalLink, Github } from "lucide-react"
+import Image from "next/image"
 
-export function Projects() {
-  const [projects, setProjects] = useState<Project[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    async function fetchProjects() {
-      try {
-        const projectsData = await getFeaturedProjects()
-        setProjects(projectsData)
-      } catch (error) {
-        console.error('Error fetching projects:', error)
-      } finally {
-        setLoading(false)
-      }
+// Dummy projects data
+const dummyProjects = [
+  {
+    id: "1",
+    title: "Advanced AI Agent System",
+    description: "A sophisticated multi-agent system that can autonomously handle complex tasks, featuring advanced reasoning capabilities and seamless human-AI collaboration.",
+    techStack: ["Python", "LangChain", "OpenAI", "React", "TypeScript"],
+    githubUrl: "https://github.com/yourusername/ai-agent-system",
+    demoUrl: "https://demo.ai-agent.com",
+    featuredImage: {
+      url: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop",
+      alt: "AI Agent System"
     }
-
-    fetchProjects()
-  }, [])
-
-  if (loading) {
-    return (
-      <section id="projects" className="section-padding">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Featured Projects</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              A showcase of my latest work in AI, machine learning, and software development.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-muted h-48 rounded-lg mb-4" />
-                <div className="space-y-2">
-                  <div className="h-4 bg-muted rounded w-3/4" />
-                  <div className="h-3 bg-muted rounded w-full" />
-                  <div className="h-3 bg-muted rounded w-2/3" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
+  },
+  {
+    id: "2", 
+    title: "Autonomous System Intelligence (ASI)",
+    description: "Next-generation autonomous system with advanced decision-making capabilities, real-time learning, and adaptive behavior patterns for complex environments.",
+    techStack: ["Python", "TensorFlow", "ROS2", "C++", "Docker"],
+    githubUrl: "https://github.com/yourusername/asi-system",
+    demoUrl: "https://demo.asi.com",
+    featuredImage: {
+      url: "https://images.unsplash.com/photo-1673187730317-4973d8d0d8e8?w=800&h=600&fit=crop",
+      alt: "Autonomous System Intelligence"
+    }
+  },
+  {
+    id: "3",
+    title: "AI-Powered Research Assistant",
+    description: "Intelligent research assistant that can analyze papers, generate insights, and help researchers discover new connections in their field of study.",
+    techStack: ["Python", "HuggingFace", "FastAPI", "Vue.js", "PostgreSQL"],
+    githubUrl: "https://github.com/yourusername/research-assistant",
+    demoUrl: "https://demo.research-assistant.com",
+    featuredImage: {
+      url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+      alt: "AI Research Assistant"
+    }
   }
+]
 
+export default function Projects() {
   return (
     <section id="projects" className="section-padding">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Featured Projects</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A showcase of my latest work in AI, machine learning, and software development.
+          <h2 className="text-4xl font-bold mb-4">Featured Projects</h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Explore my latest AI engineering projects, from autonomous systems to intelligent research tools.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {dummyProjects.map((project, index) => (
             <motion.div
-              key={project.sys.id}
+              key={project.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
             >
-              <Card className="h-full card-hover group">
-                {project.fields.featuredImage && (
+              <Card className="h-full group hover:shadow-lg transition-all duration-300">
+                <CardHeader className="p-0">
                   <div className="relative h-48 overflow-hidden rounded-t-lg">
                     <Image
-                      src={`https:${project.fields.featuredImage.fields.file.url}`}
-                      alt={project.fields.title}
+                      src={project.featuredImage.url}
+                      alt={project.featuredImage.alt}
                       fill
-                      className="object-cover transition-transform group-hover:scale-105"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                )}
-                <CardHeader>
-                  <CardTitle className="line-clamp-2">{project.fields.title}</CardTitle>
-                  <CardDescription className="line-clamp-3">
-                    {project.fields.description}
-                  </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {project.fields.techStack.map((tech) => (
+                <CardContent className="p-6">
+                  <CardTitle className="text-xl mb-2">{project.title}</CardTitle>
+                  <CardDescription className="text-muted-foreground mb-4">
+                    {project.description}
+                  </CardDescription>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.techStack.map((tech) => (
                       <span
                         key={tech}
-                        className="px-2 py-1 text-xs bg-secondary text-secondary-foreground rounded-md"
+                        className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-md"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
                 </CardContent>
-                <CardFooter className="flex gap-2">
-                  {project.fields.githubUrl && (
-                    <Button variant="outline" size="sm" asChild>
-                      <Link href={project.fields.githubUrl} target="_blank" rel="noopener noreferrer">
-                        <Github className="h-4 w-4 mr-2" />
+                <CardFooter className="p-6 pt-0">
+                  <div className="flex gap-2 w-full">
+                    <Button asChild variant="outline" className="flex-1">
+                      <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                        <Github className="w-4 h-4 mr-2" />
                         Code
-                      </Link>
+                      </a>
                     </Button>
-                  )}
-                  {project.fields.demoUrl && (
-                    <Button variant="outline" size="sm" asChild>
-                      <Link href={project.fields.demoUrl} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="h-4 w-4 mr-2" />
+                    <Button asChild className="flex-1">
+                      <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="w-4 h-4 mr-2" />
                         Demo
-                      </Link>
+                      </a>
                     </Button>
-                  )}
+                  </div>
                 </CardFooter>
               </Card>
             </motion.div>
           ))}
         </div>
 
-        {projects.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-12"
-          >
-            <p className="text-muted-foreground">No projects available at the moment.</p>
-          </motion.div>
-        )}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-center mt-12"
+        >
+          <Button asChild size="lg">
+            <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer">
+              View All Projects
+            </a>
+          </Button>
+        </motion.div>
       </div>
     </section>
   )

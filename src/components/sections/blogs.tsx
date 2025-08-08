@@ -1,163 +1,137 @@
 "use client"
 
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Calendar, ArrowRight } from 'lucide-react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { getFeaturedBlogs } from '@/lib/contentful'
-import { useEffect, useState } from 'react'
-import { formatDate } from '@/lib/utils'
-import type { Blog } from '@/types/contentful'
+import { motion } from "framer-motion"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { ArrowRight, Calendar } from "lucide-react"
+import Image from "next/image"
+import { formatDate } from "@/lib/utils"
 
-export function Blogs() {
-  const [blogs, setBlogs] = useState<Blog[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    async function fetchBlogs() {
-      try {
-        const blogsData = await getFeaturedBlogs()
-        setBlogs(blogsData)
-      } catch (error) {
-        console.error('Error fetching blogs:', error)
-      } finally {
-        setLoading(false)
-      }
+// Dummy blogs data
+const dummyBlogs = [
+  {
+    id: "1",
+    title: "The Rise of Autonomous System Intelligence (ASI)",
+    excerpt: "Exploring the next frontier in AI: Autonomous System Intelligence and its potential to revolutionize how machines think, learn, and interact with the world.",
+    publishedDate: "2024-01-15",
+    tags: ["ASI", "AI", "Autonomous Systems", "Machine Learning"],
+    slug: "rise-of-autonomous-system-intelligence",
+    featuredImage: {
+      url: "https://images.unsplash.com/photo-1673187730317-4973d8d0d8e8?w=800&h=600&fit=crop",
+      alt: "Autonomous System Intelligence"
     }
-
-    fetchBlogs()
-  }, [])
-
-  if (loading) {
-    return (
-      <section id="blog" className="section-padding bg-muted/30">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Latest Blog Posts</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Thoughts, insights, and tutorials on AI, machine learning, and technology.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-background h-48 rounded-lg mb-4" />
-                <div className="space-y-2">
-                  <div className="h-4 bg-background rounded w-3/4" />
-                  <div className="h-3 bg-background rounded w-full" />
-                  <div className="h-3 bg-background rounded w-2/3" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
+  },
+  {
+    id: "2",
+    title: "Advanced AI Agents: Beyond Traditional Chatbots",
+    excerpt: "How modern AI agents are evolving from simple chatbots to sophisticated autonomous systems capable of complex reasoning and decision-making.",
+    publishedDate: "2024-01-10",
+    tags: ["AI Agents", "Chatbots", "Autonomous Systems", "AI"],
+    slug: "advanced-ai-agents-beyond-chatbots",
+    featuredImage: {
+      url: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop",
+      alt: "Advanced AI Agents"
+    }
+  },
+  {
+    id: "3",
+    title: "The Future of AI Research: Trends and Predictions",
+    excerpt: "An analysis of emerging trends in AI research, from large language models to autonomous systems, and what the future holds for artificial intelligence.",
+    publishedDate: "2024-01-05",
+    tags: ["AI Research", "Trends", "Machine Learning", "Future Tech"],
+    slug: "future-of-ai-research-trends",
+    featuredImage: {
+      url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+      alt: "AI Research Future"
+    }
   }
+]
 
+export default function Blogs() {
   return (
-    <section id="blog" className="section-padding bg-muted/30">
+    <section id="blogs" className="section-padding bg-muted/30">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Latest Blog Posts</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Thoughts, insights, and tutorials on AI, machine learning, and technology.
+          <h2 className="text-4xl font-bold mb-4">Latest Insights</h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Thoughts, research, and insights on the latest developments in AI and autonomous systems.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogs.map((blog, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {dummyBlogs.map((blog, index) => (
             <motion.div
-              key={blog.sys.id}
+              key={blog.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
             >
-              <Card className="h-full card-hover group">
-                {blog.fields.featuredImage && (
+              <Card className="h-full group hover:shadow-lg transition-all duration-300">
+                <CardHeader className="p-0">
                   <div className="relative h-48 overflow-hidden rounded-t-lg">
                     <Image
-                      src={`https:${blog.fields.featuredImage.fields.file.url}`}
-                      alt={blog.fields.title}
+                      src={blog.featuredImage.url}
+                      alt={blog.featuredImage.alt}
                       fill
-                      className="object-cover transition-transform group-hover:scale-105"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                )}
-                <CardHeader>
-                  <div className="flex items-center text-sm text-muted-foreground mb-2">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    {formatDate(blog.fields.publishedAt)}
-                  </div>
-                  <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors">
-                    {blog.fields.title}
-                  </CardTitle>
-                  <CardDescription className="line-clamp-3">
-                    {blog.fields.excerpt}
-                  </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {blog.fields.tags.slice(0, 3).map((tag) => (
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Calendar className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">
+                      {formatDate(blog.publishedDate)}
+                    </span>
+                  </div>
+                  <CardTitle className="text-xl mb-3 line-clamp-2">{blog.title}</CardTitle>
+                  <CardDescription className="text-muted-foreground mb-4 line-clamp-3">
+                    {blog.excerpt}
+                  </CardDescription>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {blog.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-1 text-xs bg-secondary text-secondary-foreground rounded-md"
+                        className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-md"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
                 </CardContent>
-                <div className="p-6 pt-0">
-                  <Button variant="ghost" size="sm" className="group-hover:text-primary">
-                    Read More
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <CardFooter className="p-6 pt-0">
+                  <Button asChild variant="ghost" className="w-full group">
+                    <a href={`/blog/${blog.slug}`}>
+                      Read More
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </a>
                   </Button>
-                </div>
+                </CardFooter>
               </Card>
             </motion.div>
           ))}
         </div>
 
-        {blogs.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-12"
-          >
-            <p className="text-muted-foreground">No blog posts available at the moment.</p>
-          </motion.div>
-        )}
-
-        {blogs.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            viewport={{ once: true }}
-            className="text-center mt-12"
-          >
-            <Button variant="outline" size="lg">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-center mt-12"
+        >
+          <Button asChild size="lg">
+            <a href="/blog">
               View All Posts
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </motion.div>
-        )}
+            </a>
+          </Button>
+        </motion.div>
       </div>
     </section>
   )
