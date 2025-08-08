@@ -1,33 +1,42 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 
 const inter = Inter({ subsets: ['latin'] })
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: {
-    default: 'AI Engineer Portfolio',
-    template: '%s | AI Engineer Portfolio'
-  },
-  description: 'AI Engineer, Researcher, and Innovator specializing in machine learning, deep learning, and artificial intelligence.',
-  keywords: ['AI Engineer', 'Machine Learning', 'Deep Learning', 'Research', 'Portfolio'],
+  title: 'AI Engineer Portfolio',
+  description: 'Modern AI Engineer portfolio showcasing projects in autonomous systems, machine learning, and artificial intelligence.',
+  keywords: ['AI Engineer', 'Machine Learning', 'Autonomous Systems', 'Artificial Intelligence', 'Portfolio'],
   authors: [{ name: 'Your Name' }],
   creator: 'Your Name',
+  publisher: 'Your Name',
+  metadataBase: new URL('https://your-domain.vercel.app'),
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: process.env.NEXT_PUBLIC_SITE_URL,
     title: 'AI Engineer Portfolio',
-    description: 'AI Engineer, Researcher, and Innovator specializing in machine learning, deep learning, and artificial intelligence.',
+    description: 'Modern AI Engineer portfolio showcasing projects in autonomous systems, machine learning, and artificial intelligence.',
+    url: 'https://your-domain.vercel.app',
     siteName: 'AI Engineer Portfolio',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'AI Engineer Portfolio',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'AI Engineer Portfolio',
-    description: 'AI Engineer, Researcher, and Innovator specializing in machine learning, deep learning, and artificial intelligence.',
+    description: 'Modern AI Engineer portfolio showcasing projects in autonomous systems, machine learning, and artificial intelligence.',
+    images: ['/og-image.jpg'],
   },
   robots: {
     index: true,
@@ -40,9 +49,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  verification: {
-    google: 'your-google-verification-code',
-  },
 }
 
 export default function RootLayout({
@@ -52,20 +58,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.className} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <div className="min-h-screen bg-background">
-            <Header />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </div>
+          <Header />
+          {children}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

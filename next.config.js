@@ -4,10 +4,19 @@ const nextConfig = {
     // Remove deprecated appDir option
   },
   images: {
-    domains: [
-      'images.ctfassets.net',
-      'downloads.ctfassets.net',
-      'images.unsplash.com' // Add Unsplash domain
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.ctfassets.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'downloads.ctfassets.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
     ],
     formats: ['image/webp', 'image/avif'],
   },
